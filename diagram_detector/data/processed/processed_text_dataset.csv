@@ -1,0 +1,9 @@
+text_id,text_content,label
+1,"This is a physics diagram illustrating Newton's laws of motion.",physics
+2,"A mathematical graph showing the quadratic equation.",mathematics
+3,"Chemical reaction diagram depicting the process of photosynthesis.",chemistry
+4,"A biological diagram of the human circulatory system.",biology
+5,"Zoological diagram showing the classification of animals.",zoology
+6,"Botanical diagram illustrating the parts of a flower.",botany
+7,"This image does not contain any diagrams.",no_diagram
+8,"An abstract image with no relevant content.",no_diagram
