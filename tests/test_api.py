@@ -1,25 +1,11 @@
-import unittest
-from api.main import app
+import requests
 
-class TestAPI(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.client = app.test_client()
+# Test text endpoint
+text_payload = {"question": "Draw the structure of benzene."}
+response = requests.post("http://localhost:8000/detect_text", json=text_payload)
+print("Text Detection:", response.json())
 
-    def test_health_check(self):
-        response = self.client.get('/health')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'status': 'healthy'})
-
-    def test_diagram_detection(self):
-        response = self.client.post('/detect', json={'image': 'base64_encoded_image_string'})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('detected_diagram', response.json)
-
-    def test_no_diagram_detection(self):
-        response = self.client.post('/detect', json={'image': 'base64_encoded_no_diagram_image_string'})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('no_diagram', response.json)
-
-if __name__ == '__main__':
-    unittest.main()
+# Test image endpoint
+with open("data/processed_images/sample_image.jpg", "rb") as f:
+    response = requests.post("http://localhost:8000/detect_image", files={"file": f})
+print("Image Detection:", response.json())

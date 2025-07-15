@@ -1,17 +1,15 @@
 #!/bin/bash
+# Create project directory
+mkdir diagram_detector
+cd diagram_detector
 
-# Create necessary directories
-mkdir -p data/raw/images/diagram/physics
-mkdir -p data/raw/images/diagram/mathematics
-mkdir -p data/raw/images/diagram/chemistry
-mkdir -p data/raw/images/diagram/biology
-mkdir -p data/raw/images/diagram/zoology
-mkdir -p data/raw/images/diagram/botany
-mkdir -p data/raw/images/no_diagram
-mkdir -p data/processed/processed_images
-mkdir -p models/text_detector
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
 
 # Install dependencies
-pip install -r requirements.txt
+pip install transformers torch torchvision fastapi uvicorn opencv-python numpy pandas scikit-learn
 
-echo "Setup complete. Project environment is ready."
+# Create directory structure
+mkdir -p data models src api
+touch src/text_detector.py src/image_detector.py api/main.py

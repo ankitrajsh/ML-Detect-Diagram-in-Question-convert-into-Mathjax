@@ -8,6 +8,7 @@ import numpy as np
 import os
 from sklearn.model_selection import train_test_split
 
+# Custom dataset
 class ImageDataset(Dataset):
     def __init__(self, image_paths, labels, transform=None):
         self.image_paths = image_paths
@@ -25,6 +26,7 @@ class ImageDataset(Dataset):
         label = self.labels[idx]
         return image, label
 
+# Training function
 def train_image_model(model, train_loader, val_loader, device, epochs=5):
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -38,10 +40,12 @@ def train_image_model(model, train_loader, val_loader, device, epochs=5):
             outputs = model(images)
             loss = criterion(outputs, labels)
             train_loss += loss.item()
+            
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
         
+        # Validation
         model.eval()
         val_loss = 0
         with torch.no_grad():
@@ -52,13 +56,16 @@ def train_image_model(model, train_loader, val_loader, device, epochs=5):
         
         print(f"Epoch {epoch+1}/{epochs}, Train Loss: {train_loss/len(train_loader):.4f}, Val Loss: {val_loss/len(val_loader):.4f}")
 
+# Main
 if __name__ == "__main__":
-    # Sample image dataset (replace with real data)
-    image_paths = ["data/processed/processed_images/sample_image.jpg"]
+    # Example image dataset (replace with actual paths and labels)
+    image_paths = ["data/processed_images/sample_image.jpg"]  # Add real image paths
     labels = [1]  # 1 for diagram, 0 for no-diagram
     
+    # Split data
     train_paths, val_paths, train_labels, val_labels = train_test_split(image_paths, labels, test_size=0.2, random_state=42)
     
+    # Define transforms
     transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
@@ -66,16 +73,21 @@ if __name__ == "__main__":
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     
+    # Create datasets
     train_dataset = ImageDataset(train_paths, train_labels, transform)
     val_dataset = ImageDataset(val_paths, val_labels, transform)
     
+    # Create data loaders
     train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=8)
     
+    # Initialize model
     model = models.resnet18(pretrained=True)
-    model.fc = nn.Linear(model.fc.in_features, 2)
+    model.fc = nn.Linear(model.fc.in_features, 2)  # Binary classification
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
+    # Train model
     train_image_model(model, train_loader, val_loader, device)
     
+    # Save model
     torch.save(model.state_dict(), "models/image_detector.pt")
