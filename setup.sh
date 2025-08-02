@@ -1,7 +1,7 @@
 #!/bin/bash
 # Create project directory
-mkdir diagram_detector
-cd diagram_detector
+mkdir ML-Detect-Diagram-in-Question-convert-into-Mathjax
+cd ML-Detect-Diagram-in-Question-convert-into-Mathjax
 
 # Create virtual environment
 python3 -m venv venv
