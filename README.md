@@ -38,8 +38,8 @@ The Diagram Detector project is designed to identify and classify various types 
 ## Setup Instructions
 1. Clone the repository:
    ```
-   git clone <repository-url>
-   cd diagram_detector
+   git clone https://github.com/ankitrajsh/ML-Detect-Diagram-in-Question-convert-into-Mathjax.git
+   cd ML-Detect-Diagram-in-Question-convert-into-Mathjax
    ```
 
 2. Install dependencies:
