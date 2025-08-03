@@ -1,4 +1,4 @@
-    # Diagram Detector
+# Diagram Detector
 
 ## Overview
 The Diagram Detector project is designed to identify and classify various types of diagrams from images and text data. This project utilizes machine learning models for text and image detection, enabling efficient processing and analysis of educational and scientific diagrams.
