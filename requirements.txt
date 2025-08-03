@@ -1,10 +1,30 @@
-transformers==4.41.2 
-torch==2.3.0 
-torchvision==0.18.0 
-fastapi==0.111.0 
-uvicorn==0.30.1 
-opencv-python==4.10.0.82 
-numpy==1.26.4 
-pandas==2.2.2 
+# Core ML and NLP libraries
+transformers==4.41.2
+torch==2.3.0
+torchvision==0.18.0
+
+# API framework
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# Image processing
+opencv-python==4.10.0.82
+Pillow==10.3.0
+
+# Data processing
+numpy==1.26.4
+pandas==2.2.2
 scikit-learn==1.5.0
+
+# OCR (optional)
 pytesseract==0.3.10
+
+# Testing
+pytest==8.2.0
+pytest-asyncio==0.23.6
+httpx==0.27.0
+
+# Utilities
+python-multipart==0.0.9
+aiofiles==23.2.0
+pydantic==2.7.1
