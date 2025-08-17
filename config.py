@@ -20,6 +20,14 @@ class Config:
     # File Upload Configuration
     MAX_FILE_SIZE: int = int(os.getenv("MAX_FILE_SIZE_MB", "10")) * 1024 * 1024  # Convert MB to bytes
     ALLOWED_EXTENSIONS: Set[str] = set(os.getenv("ALLOWED_EXTENSIONS", ".jpg,.jpeg,.png,.bmp,.tiff").split(","))
+
+    # Azure OpenAI (optional, for GPT-based diagram detection)
+    USE_GPT_DIAGRAM: bool = os.getenv("USE_GPT_DIAGRAM", "false").lower() in {"1", "true", "yes"}
+    AZURE_OPENAI_ENDPOINT: str = os.getenv("AZURE_OPENAI_ENDPOINT", "")
+    # Support both names: AZURE_OPENAI_API_KEY (preferred) and AZURE_OPEN_AI_KEY (legacy)
+    AZURE_OPENAI_API_KEY: str = os.getenv("AZURE_OPENAI_API_KEY") or os.getenv("AZURE_OPEN_AI_KEY", "")
+    AZURE_OPENAI_DEPLOYMENT: str = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o")
+    AZURE_OPENAI_API_VERSION: str = os.getenv("AZURE_OPENAI_API_VERSION", "2024-06-01")
     
     # Model Configuration
     MAX_TEXT_LENGTH: int = 1000
