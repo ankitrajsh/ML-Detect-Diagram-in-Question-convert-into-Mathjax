@@ -1,110 +1,142 @@
 # Diagram Detector
 
 ## Overview
-The Diagram Detector project is designed to identify and classify various types of diagrams from images and text data. This project utilizes machine learning models for text and image detection, enabling efficient processing and analysis of educational and scientific diagrams.
+The Diagram Detector project identifies and classifies diagrams in questions and images. It uses machine learning models for text and image detection to help detect diagram-related content in educational and scientific material.
 
-## Project Structure
-- **data/**: Contains raw and processed datasets.
-  - **raw/**: Original datasets including text and images.
-    - **text_dataset.csv**: Raw text dataset for training/testing.
-    - **images/**: Directory containing images categorized into diagrams and non-diagrams.
-      - **diagram/**: Subdirectories for different types of diagrams (physics, mathematics, chemistry, biology, zoology, botany).
-      - **no_diagram/**: Images that do not contain any diagrams.
-  - **processed/**: Processed datasets ready for model training.
-    - **processed_text_dataset.csv**: Processed text dataset.
-    - **processed_images/**: Directory for processed images.
+## Project structure
+- `data/` - datasets
+  - `raw/` - original datasets
+    - `text_dataset.csv`
+    - `images/`
+      - `diagram/` (subfolders: biology, botany, chemistry, mathematics, physics, zoology)
+      - `no_diagram/`
+  - `processed/` - processed datasets
+    - `processed_text_dataset.csv`
+    - `processed_images/`
 
-- **models/**: Contains trained models and related scripts.
-  - **text_detector/**: Directory for text detection models.
-  - **image_detector.pt**: PyTorch model file for image detection.
+- `models/` - trained models
+  - `text_detector/`
+  - `image_detector.pt`
 
-- **src/**: Source code for preprocessing and model implementation.
-  - **preprocess.py**: Script for data preprocessing.
-  - **text_detector.py**: Implementation of the text detection model.
-  - **image_detector.py**: Implementation of the image detection model.
+- `src/` - training / preprocessing / utilities
+  - `preprocess.py`
+  - `text_detector.py`
+  - `image_detector.py`
 
-- **api/**: Contains the API for interacting with the model.
-  - **main.py**: Entry point for the API.
+- `api/` - FastAPI application
+  - `main.py`
 
-- **tests/**: Unit tests for the API.
-  - **test_api.py**: Tests to ensure API functionality.
+- `tests/` - unit tests
+  - `test_api.py`
 
-- **Dockerfile**: Instructions for building a Docker image for the project.
-
-- **requirements.txt**: Lists the Python dependencies required for the project.
-
-- **setup.sh**: Script to set up the project environment.
+Other files: `Dockerfile`, `requirements.txt`, `setup.sh`, `start.py`.
 
 ## Features
-- **Text Detection**: Analyze text questions to detect diagram-related content using BERT
-- **Image Detection**: Classify uploaded images as containing diagrams or not using ResNet
-- **RESTful API**: FastAPI-based API with automatic documentation
-- **Robust Error Handling**: Comprehensive error handling and validation
-- **Health Monitoring**: Built-in health check endpoints
-- **Configurable**: Environment-based configuration system
-- **Testing Suite**: Comprehensive test coverage with pytest
-- **Docker Support**: Production-ready Docker container
-- **Logging**: Structured logging for debugging and monitoring
+- Text detection using transformer-based models (BERT or similar)
+- Image detection using a ResNet-based classifier
+- FastAPI REST endpoints with automatic docs
+- Health checks and basic monitoring endpoints
+- Configurable via environment variables
+- Tests with pytest and included example scripts
 
-## Quick Start
+## Requirements
+- Python 3.8+
+- Recommended: create and use a virtual environment (instructions below)
 
-### Option 1: Using the Startup Script (Recommended)
+## Virtual environment (recommended)
+Use a virtual environment to isolate project dependencies.
+
+1. Verify Python is available (use `python3` on many Linux/macOS systems):
+
+   ```bash
+   python3 --version
+   ```
+
+2. Create the virtual environment in the project root:
+
+   ```bash
+   python3 -m venv .venv
+   ```
+
+3. Activate the virtual environment:
+
+   - Linux / macOS (bash/zsh):
+     ```bash
+     source .venv/bin/activate
+     ```
+
+   - Windows (PowerShell):
+     ```powershell
+     .\.venv\Scripts\Activate.ps1
+     ```
+
+4. Upgrade packaging tools and install requirements:
+
+   ```bash
+   pip install --upgrade pip setuptools wheel
+   pip install -r requirements.txt
+   ```
+
+Notes:
+- If you need CUDA-enabled PyTorch, use the selector at https://pytorch.org/get-started/locally/ to obtain the correct install command (it may use a custom `--index-url`). Example CPU-only command:
+  ```bash
+  pip install torch --index-url https://download.pytorch.org/whl/cpu
+  ```
+
+## Quick start
 1. Clone the repository:
    ```bash
    git clone https://github.com/ankitrajsh/ML-Detect-Diagram-in-Question-convert-into-Mathjax.git
    cd ML-Detect-Diagram-in-Question-convert-into-Mathjax
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment (see the "Virtual environment" section above for commands).
+
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Start the API:
+4. (Optional) Copy environment example and edit values if present:
    ```bash
-   python start.py
+   cp .env.example .env  # only if .env.example exists
    ```
 
-### Option 2: Using Docker
-1. Build the Docker image:
+5. Start the API (two equivalent options):
+   ```bash
+   # recommended: helper script
+   python start.py
+
+   # or run the FastAPI app directly
+   python api/main.py
+   ```
+
+6. Open the API docs in your browser:
+   http://localhost:8000/docs
+
+### Using Docker
+1. Build the image:
    ```bash
    docker build -t diagram-detector .
    ```
-
-2. Run the container:
+2. Run the container (map the port):
    ```bash
    docker run -p 8000:8000 diagram-detector
    ```
 
-### Option 3: Manual Setup
-1. Clone and install dependencies (steps 1-2 from Option 1)
+## API endpoints
+- Documentation: `GET /docs`
+- Health: `GET /health`
+- Info: `GET /`
 
-2. Create sample data (optional):
-   ```bash
-   python src/preprocess.py --create-sample
-   ```
-
-3. Start the API directly:
-   ```bash
-   python api/main.py
-   ```
-
-## API Usage
-
-Once the API is running, you can:
-
-- **Access the API documentation**: http://localhost:8000/docs
-- **Check API health**: http://localhost:8000/health
-- **View API info**: http://localhost:8000/
-
-### Text Detection Endpoint
+Example: Text detection
 ```bash
 curl -X POST "http://localhost:8000/detect_text" \
      -H "Content-Type: application/json" \
      -d '{"question": "Draw the structure of benzene"}'
 ```
 
-### Image Detection Endpoint
+Example: Image detection
 ```bash
 curl -X POST "http://localhost:8000/detect_image" \
      -H "Content-Type: multipart/form-data" \
@@ -112,72 +144,48 @@ curl -X POST "http://localhost:8000/detect_image" \
 ```
 
 ## Configuration
-
-The application can be configured using environment variables. Copy `.env.example` to `.env` and modify as needed:
-
-```bash
-cp .env.example .env
-```
-
-Key configuration options:
-- `API_HOST`: Host to bind to (default: 0.0.0.0)
-- `API_PORT`: Port to bind to (default: 8000)
-- `LOG_LEVEL`: Logging level (default: info)
-- `MAX_FILE_SIZE_MB`: Maximum upload file size (default: 10MB)
-- `TEXT_MODEL_PATH`: Path to text detection model
-- `IMAGE_MODEL_PATH`: Path to image detection model
+Configuration is controlled via environment variables. If a `.env.example` is provided, copy it to `.env` and update values.
+Important variables (defaults shown where applicable):
+- `API_HOST` (default: `0.0.0.0`)
+- `API_PORT` (default: `8000`)
+- `LOG_LEVEL` (default: `info`)
+- `MAX_FILE_SIZE_MB` (default: `10`)
+- `TEXT_MODEL_PATH` - path to a saved text model (if required)
+- `IMAGE_MODEL_PATH` - path to the image model (e.g., `models/image_detector.pt`)
 
 ## Development
+- Run tests:
+  ```bash
+  pytest
+  ```
 
-### Running Tests
-```bash
-# Run all tests
-pytest
+- Run a single test file:
+  ```bash
+  pytest tests/test_api.py
+  ```
 
-# Run with coverage
-pytest --cov=src --cov=api
+- Run basic tests without pytest (if the file is executable as a script):
+  ```bash
+  python tests/test_api.py
+  ```
 
-# Run specific test file
-pytest tests/test_api.py
+- Create sample data (if `preprocess.py` supports it):
+  ```bash
+  python src/preprocess.py --create-sample
+  ```
 
-# Run basic tests without pytest
-python tests/test_api.py
-```
+- Train models (if training scripts are implemented):
+  ```bash
+  python src/text_detector.py
+  python src/image_detector.py
+  ```
 
-### Data Preprocessing
-```bash
-# Create sample dataset
-python src/preprocess.py --create-sample
-
-# Process custom text data
-python src/preprocess.py --text-input data/raw/text.csv --text-output data/processed/text.csv
-
-# Process custom image data
-python src/preprocess.py --image-input data/raw/images --image-output data/processed/images
-```
-
-### Model Training
-```bash
-# Train text detection model
-python src/text_detector.py
-
-# Train image detection model
-python src/image_detector.py
-```
-   ```
-   bash setup.sh
-   ```
-
-## Usage
-To start the API, run:
-```
-python api/main.py
-```
-
-You can then send requests to the API to detect and classify diagrams from images and text.
+## Troubleshooting
+- If the API fails to start, check that dependencies from `requirements.txt` are installed and that the configured model paths exist.
+- Check logs (the application respects `LOG_LEVEL`).
 
 ## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
+Contributions are welcome. Please open issues or submit pull requests.
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.

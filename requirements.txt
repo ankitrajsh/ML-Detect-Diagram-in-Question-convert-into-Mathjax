@@ -1,7 +1,7 @@
 # Core ML and NLP libraries
 transformers==4.41.2
-torch==2.2.2
-torchvision==0.17.2
+torch>=2.5.0,<3.0
+torchvision>=0.21.0,<0.24.0
 
 # API framework
 fastapi==0.111.0
@@ -32,3 +32,11 @@ pydantic==2.7.1
 # Apps
 streamlit==1.36.0
 openai>=1.30.0
+
+# Notes:
+# - If you need CUDA support, use the PyTorch selector at https://pytorch.org/get-started/locally/ to get the
+#   correct install command (it may use a custom --index-url). Example CPU-only install:
+#     pip install torch --index-url https://download.pytorch.org/whl/cpu
+# - After updating this file, run:
+#     pip install --upgrade pip setuptools wheel
+#     pip install -r requirements.txt
